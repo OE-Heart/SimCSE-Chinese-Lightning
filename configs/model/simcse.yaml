@@ -1,0 +1,10 @@
+_target_: src.models.simcse_unsup_module.SimcseModule
+
+net:
+  _target_: src.models.components.simcse_model.SimcseModel
+  PLM_path: /home/ouyixin/PLM/bert-base-chinese
+  supervise: False
+  pooling: cls
+  dropout: 0.1
+
+lr: 1e-5

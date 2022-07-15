@@ -3,10 +3,10 @@
 # specify here default evaluation configuration
 defaults:
   - _self_
-  - datamodule: mnist.yaml # choose the datamodule for evaluation
-  - model: mnist.yaml
-  - callbacks: null
-  - logger: null
+  - datamodule: simcse.yaml # choose the datamodule for evaluation
+  - model: simcse.yaml
+  - callbacks: simcse.yaml
+  - logger: tensorboard
   - trainer: default.yaml
   - log_dir: evaluation.yaml
 
