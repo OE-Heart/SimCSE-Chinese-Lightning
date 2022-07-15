@@ -52,17 +52,42 @@ class SimcseDataModule(LightningDataModule):
 
         # load datasets only if they're not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
-            train_data_snli = load_data('snli', self.hparams.snli_train_dir)
-            train_data_sts = load_data('sts', self.hparams.sts_train_dir)
-            train_data = train_data_snli + [_[0] for _ in train_data_sts]   # 两个数据集组合
-            train_data = random.sample(train_data, self.hparams.train_size)
-            self.data_train = SimcseDataset(data=train_data, split="train", supervise=self.hparams.supervise, tokenizer=self.tokenizer, max_length=self.hparams.max_length)
+            if self.hparams.supervise:
+                train_data = load_data("snli", self.hparams.snli_train_dir, self.hparams.supervise)
+            else:
+                train_data_snli = load_data(
+                    "snli", self.hparams.snli_train_dir, self.hparams.supervise
+                )
+                train_data_sts = load_data(
+                    "sts", self.hparams.sts_train_dir, self.hparams.supervise
+                )
+                train_data = train_data_snli + [_[0] for _ in train_data_sts]  # 两个数据集组合
+                train_data = random.sample(train_data, self.hparams.train_size)
+            self.data_train = SimcseDataset(
+                data=train_data,
+                split="train",
+                supervise=self.hparams.supervise,
+                tokenizer=self.tokenizer,
+                max_length=self.hparams.max_length,
+            )
 
-            dev_data = load_data('sts', self.hparams.sts_dev_dir)
-            self.data_val = SimcseDataset(data=dev_data, split="test", supervise=self.hparams.supervise, tokenizer=self.tokenizer, max_length=self.hparams.max_length)
+            dev_data = load_data("sts", self.hparams.sts_dev_dir, self.hparams.supervise)
+            self.data_val = SimcseDataset(
+                data=dev_data,
+                split="test",
+                supervise=self.hparams.supervise,
+                tokenizer=self.tokenizer,
+                max_length=self.hparams.max_length,
+            )
 
-            test_data = load_data('sts', self.hparams.sts_test_dir)
-            self.data_test = SimcseDataset(data=test_data, split="test", supervise=self.hparams.supervise, tokenizer=self.tokenizer, max_length=self.hparams.max_length)
+            test_data = load_data("sts", self.hparams.sts_test_dir, self.hparams.supervise)
+            self.data_test = SimcseDataset(
+                data=test_data,
+                split="test",
+                supervise=self.hparams.supervise,
+                tokenizer=self.tokenizer,
+                max_length=self.hparams.max_length,
+            )
 
     def train_dataloader(self):
         return DataLoader(
@@ -70,7 +95,7 @@ class SimcseDataModule(LightningDataModule):
             batch_size=self.hparams.batch_size,
             num_workers=self.hparams.num_workers,
             pin_memory=self.hparams.pin_memory,
-            shuffle=False,
+            shuffle=True,
         )
 
     def val_dataloader(self):

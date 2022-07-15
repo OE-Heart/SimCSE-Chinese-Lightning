@@ -5,7 +5,6 @@ snli_train_dir: ${data_dir}/cnsd-snli/train.txt
 sts_train_dir: ${data_dir}/STS-B/cnsd-sts-train.txt
 sts_dev_dir: ${data_dir}/STS-B/cnsd-sts-dev.txt
 sts_test_dir: ${data_dir}/STS-B/cnsd-sts-test.txt
-supervise: False
 train_size: 10000
 max_length: 64
 batch_size: 64

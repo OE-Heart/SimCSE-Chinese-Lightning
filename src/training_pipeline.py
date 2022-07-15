@@ -2,7 +2,7 @@ import os
 from typing import List, Optional
 
 import hydra
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning import (
     Callback,
     LightningDataModule,
@@ -38,6 +38,14 @@ def train(config: DictConfig) -> Optional[float]:
         config.trainer.resume_from_checkpoint = os.path.join(
             hydra.utils.get_original_cwd(), ckpt_path
         )
+
+    # Set supervision mode
+    if config.supervise:
+        log.info("Supervised training")
+    else:
+        log.info("Unsupervised training")
+    OmegaConf.update(config, "datamodule.supervise", config.supervise, force_add=True)
+    OmegaConf.update(config, "model.supervise", config.supervise, force_add=True)
 
     # Init lightning datamodule
     log.info(f"Instantiating datamodule <{config.datamodule._target_}>")

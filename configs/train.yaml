@@ -42,6 +42,8 @@ print_config: True
 # disable python warnings if they annoy you
 ignore_warnings: True
 
+supervise: False
+
 # set False to skip model training
 train: True
 
